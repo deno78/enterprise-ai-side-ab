@@ -1,0 +1,83 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["AGENTS.md", "spec.md"],
+  "skills": {
+    "paths": [
+      ".opencode/skills",
+      "skills"
+    ]
+  },
+  "agent": {
+    "architect": {
+      "model": "deepseek/deepseek-v4-flash-free",
+      "description": "システム設計、データ構造、アーキテクチャの設計を行う専門エージェント。spec.mdの要件からdocs/system_spec.mdを作成する",
+      "mode": "subagent",
+      "permission": {
+        "edit": "allow",
+        "bash": "deny"
+      }
+    },
+    "developer": {
+      "model": "deepseek/deepseek-v4-flash-free",
+      "description": "設計書に基づいてバックエンド(Flask)とフロントエンド(Vue.js)のコードを実装するエージェント",
+      "mode": "subagent",
+      "permission": {
+        "edit": "allow",
+        "bash": "allow"
+      }
+    },
+    "reviewer": {
+      "model": "deepseek/deepseek-v4-flash-free",
+      "description": "設計書・コード・テストの品質を検証し改善点を指摘するレビュアーエージェント",
+      "mode": "subagent",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask"
+      }
+    }
+  },
+  "command": {
+    "init-db": {
+      "description": "SQLiteデータベースを初期化しシードデータを投入する",
+      "template": "initialize_db.py を実行してデータベースを初期化・シードデータ投入してください。\n\n実行: python init_db.py\n\n既存の database.db があれば削除してから作成してください。"
+    },
+    "test": {
+      "description": "全テストを実行する",
+      "template": "run_tests.py または pytest で全テストを実行し、結果を報告してください。\n\n実行: python -m pytest tests/ -v"
+    },
+    "build": {
+      "description": "アプリケーションを起動して動作確認する",
+      "template": "Flaskアプリケーションを起動し、http://localhost:5000 でアクセスできることを確認してください。\n\n実行: python app.py"
+    },
+    "dist": {
+      "description": "dist/ に成果物を出力する",
+      "template": "spec.md に定義された全成果物を dist/ ディレクトリに出力してください。\n\n成果物:\n1. docs/system_spec.md, docs/api_spec.md (仕様書 日英)\n2. ソースコード一式の圧縮ファイル\n3. manual/user_guide.md (利用者マニュアル 日英)"
+    }
+  },
+  "references": {
+    "spec": {
+      "path": "spec.md",
+      "description": "システム要件定義書。全エージェントが参照する最上位の仕様"
+    },
+    "design-docs": {
+      "path": "docs",
+      "description": "設計書ディレクトリ。system_spec.md などを格納"
+    },
+    "agent-instructions": {
+      "path": "skills",
+      "description": "各エージェントの役割定義と実装ガイドライン"
+    }
+  },
+  "permission": {
+    "edit": "allow",
+    "bash": {
+      "git *": "allow",
+      "rm *": "deny",
+      "*": "ask"
+    }
+  },
+  "compaction": {
+    "auto": true,
+    "tail_turns": 10
+  }
+}

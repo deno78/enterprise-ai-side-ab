@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title v-text="t('app_title')"></title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+</head>
+<body>
+<div id="app">
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="brand" @click.prevent="goHome">{[ t('app_title') ]}</a>
+      <a href="#" @click.prevent="goHome" :class="{ active: page === 'home' }">{[ t('home') ]}</a>
+      <a href="#" @click.prevent="changePage('facilities')" :class="{ active: page === 'facilities' }">{[ t('facilities') ]}</a>
+      <template v-if="user">
+        <a href="#" @click.prevent="changePage('reservations')" :class="{ active: page === 'reservations' }">{[ t('my_reservations') ]}</a>
+        <a href="#" @click.prevent="changePage('profile')" :class="{ active: page === 'profile' }">{[ t('profile') ]}</a>
+      </template>
+      <span class="spacer"></span>
+      <div class="nav-right">
+        <template v-if="user">
+          <span class="user-name">{[ t('welcome_user') ]}, {[ user.name ]}</span>
+          <button class="btn btn-sm btn-outline" style="color:#fff;border-color:rgba(255,255,255,.4)" @click="logout">{[ t('logout') ]}</button>
+        </template>
+        <template v-else>
+          <button class="btn btn-sm btn-outline" style="color:#fff;border-color:rgba(255,255,255,.4)" @click="changePage('login')">{[ t('login') ]}</button>
+          <button class="btn btn-sm btn-outline" style="color:#fff;border-color:rgba(255,255,255,.4)" @click="changePage('register')">{[ t('register') ]}</button>
+        </template>
+        <select v-model="currentLang" @change="changeLang">
+          <option value="ja">日本語</option>
+          <option value="en">English</option>
+          <option value="zh">中文</option>
+        </select>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div v-if="message" :class="'alert alert-' + messageType">{[ message ]}</div>
+
+    <!-- Home -->
+    <div v-if="page === 'home'">
+      <div class="welcome-section">
+        <h1>{[ t('welcome') ]}</h1>
+        <p>{[ t('welcome_desc') ]}</p>
+        <button class="btn btn-primary" @click="changePage('facilities')">{[ t('facilities') ]}</button>
+      </div>
+    </div>
+
+    <!-- Login -->
+    <div v-if="page === 'login'" class="auth-form">
+      <div class="card">
+        <h2>{[ t('login_title') ]}</h2>
+        <div class="form-group">
+          <label>{[ t('username') ]}</label>
+          <input v-model="loginForm.username" @keyup.enter="doLogin">
+        </div>
+        <div class="form-group">
+          <label>{[ t('password') ]}</label>
+          <input type="password" v-model="loginForm.password" @keyup.enter="doLogin">
+        </div>
+        <button class="btn btn-primary w-full" @click="doLogin" :disabled="loading">{[ t('login') ]}</button>
+        <div class="switch-link"><a href="#" @click.prevent="changePage('register')">{[ t('no_account') ]}</a></div>
+      </div>
+    </div>
+
+    <!-- Register -->
+    <div v-if="page === 'register'" class="auth-form">
+      <div class="card">
+        <h2>{[ t('register_title') ]}</h2>
+        <div class="form-group">
+          <label>{[ t('username') ]}</label>
+          <input v-model="registerForm.username">
+        </div>
+        <div class="form-group">
+          <label>{[ t('name') ]}</label>
+          <input v-model="registerForm.name">
+        </div>
+        <div class="form-group">
+          <label>{[ t('email') ]}</label>
+          <input type="email" v-model="registerForm.email">
+        </div>
+        <div class="form-group">
+          <label>{[ t('password') ]}</label>
+          <input type="password" v-model="registerForm.password">
+        </div>
+        <button class="btn btn-primary w-full" @click="doRegister" :disabled="loading">{[ t('register') ]}</button>
+        <div class="switch-link"><a href="#" @click.prevent="changePage('login')">{[ t('already_have_account') ]}</a></div>
+      </div>
+    </div>
+
+    <!-- Facility Search -->
+    <div v-if="page === 'facilities'">
+      <h1 style="margin-bottom:1rem">{[ t('facilities') ]}</h1>
+      <div class="search-bar">
+        <input v-model="searchQuery" :placeholder="t('search_placeholder')" @keyup.enter="searchFacilities">
+        <select v-model="searchType">
+          <option value="">{[ t('all_types') ]}</option>
+          <option value="gym">{[ t('gym') ]}</option>
+          <option value="meeting_room">{[ t('meeting_room') ]}</option>
+          <option value="pool">{[ t('pool') ]}</option>
+        </select>
+        <input type="number" v-model.number="searchPriceMax" :placeholder="t('price') + ' ' + t('yen')" class="price-input" style="width:120px">
+        <button class="btn btn-primary" @click="searchFacilities">{[ t('search') ]}</button>
+      </div>
+
+      <div v-if="loading" class="text-center"><span class="spinner"></span></div>
+
+      <div v-if="facilities.length === 0 && !loading" class="card text-center">
+        <p style="color:var(--text-light)">{[ t('no_results') ]}</p>
+      </div>
+
+      <div v-if="facilities.length > 0" class="facility-grid">
+        <div v-for="f in facilities" :key="f.id" class="card facility-card" @click="viewFacility(f.id)">
+          <h3>{[ f.name ]}</h3>
+          <div class="meta">
+            <span :class="'badge badge-' + f.type">{[ typeLabel(f.type) ]}</span>
+            <span>&#x1f4cd; {[ f.location ]}</span>
+            <span>&#x1f4b0; {[ f.price.toLocaleString() ]}{[ t('per_hour') ]}</span>
+            <span>&#x1f465; {[ t('capacity') ]}: {[ f.capacity ]}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Facility Detail -->
+    <div v-if="page === 'facility-detail' && selectedFacility">
+      <a href="#" @click.prevent="changePage('facilities')" style="display:inline-block;margin-bottom:1rem">&larr; {[ t('back') ]}</a>
+
+      <div class="card">
+        <div class="facility-detail-header">
+          <h1>{[ selectedFacility.name ]}</h1>
+          <div class="meta">
+            <span :class="'badge badge-' + selectedFacility.type">{[ typeLabel(selectedFacility.type) ]}</span>
+            <span>&#x1f4cd; {[ selectedFacility.location ]}</span>
+            <span>&#x1f4b0; {[ selectedFacility.price.toLocaleString() ]}{[ t('per_hour') ]}</span>
+            <span>&#x1f465; {[ t('capacity') ]}: {[ selectedFacility.capacity ]}</span>
+          </div>
+        </div>
+        <p v-if="selectedFacility.description" style="color:var(--text-light);margin-bottom:1rem">{[ selectedFacility.description ]}</p>
+      </div>
+
+      <div class="card" v-if="user">
+        <h2>{[ t('reserve') ]}</h2>
+        <div class="form-group">
+          <label>{[ t('date') ]}</label>
+          <input type="date" v-model="reservationForm.date" :min="today">
+        </div>
+        <button class="btn btn-primary" @click="checkAvailability" :disabled="loading">{[ t('check_availability') ]}</button>
+
+        <div v-if="timeSlots.length > 0" style="margin-top:1rem">
+          <p style="margin-bottom:.5rem;font-weight:600">{[ t('select_time') ]}</p>
+          <div class="availability-grid">
+            <div v-for="slot in timeSlots" :key="slot.start"
+                 :class="['time-slot', slot.available ? 'available' : 'booked', selectedSlot === slot.start ? 'selected' : '']"
+                 @click="selectSlot(slot)">
+              <div>{[ slot.start ]}</div>
+              <div style="font-size:.7rem;margin-top:2px">
+                <span v-if="slot.available">{[ t('available') ]}</span>
+                <span v-else>{[ t('unavailable') ]}</span>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="selectedSlot" style="margin-top:1rem">
+            <div class="form-row">
+              <div class="form-group">
+                <label>{[ t('num_people') ]}</label>
+                <input type="number" v-model.number="reservationForm.num_people" min="1" :max="selectedFacility.capacity">
+              </div>
+              <div class="form-group">
+                <label>{[ t('purpose') ]}</label>
+                <input v-model="reservationForm.purpose" :placeholder="t('purpose_placeholder')">
+              </div>
+            </div>
+            <p style="font-weight:600;margin-bottom:.5rem">{[ t('total_price') ]}: {[ (selectedFacility.price).toLocaleString() ]}{[ t('yen') ]}</p>
+            <button class="btn btn-success" @click="createReservation" :disabled="loading">{[ t('reserve') ]}</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" v-else style="text-align:center">
+        <p>{[ t('login') ]}</p>
+        <button class="btn btn-primary mt-1" @click="changePage('login')">{[ t('login') ]}</button>
+      </div>
+    </div>
+
+    <!-- My Reservations -->
+    <div v-if="page === 'reservations'">
+      <h1 style="margin-bottom:1rem">{[ t('your_reservations') ]}</h1>
+      <div v-if="loading" class="text-center"><span class="spinner"></span></div>
+      <div v-if="reservations.length === 0 && !loading" class="card text-center">
+        <p style="color:var(--text-light)">{[ t('no_reservations') ]}</p>
+      </div>
+      <div v-if="reservations.length > 0" class="reservation-list">
+        <div v-for="r in reservations" :key="r.id" class="reservation-item card" style="margin-bottom:0">
+          <div class="info">
+            <h4>{[ r.facility_name ]}</h4>
+            <p>{[ r.date ]} | {[ r.start_time ]} - {[ r.end_time ]} | {[ r.num_people ]}{[ t('hour') ]} | {[ r.status === 'confirmed' ? t('confirmed') : t('cancelled') ]} | {[ r.payment_status === 'paid' ? t('paid') : t('unpaid') ]}</p>
+          </div>
+          <div class="actions">
+            <button class="btn btn-sm btn-primary" @click="viewReservation(r.id)">{[ t('detail') ]}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reservation Detail -->
+    <div v-if="page === 'reservation-detail' && selectedReservation">
+      <a href="#" @click.prevent="changePage('reservations')" style="display:inline-block;margin-bottom:1rem">&larr; {[ t('back') ]}</a>
+
+      <div class="card">
+        <h2>{[ t('booking_details') ]}</h2>
+        <table style="width:100%;border-collapse:collapse">
+          <tr><td style="padding:.5rem;font-weight:600;color:var(--text-light);width:140px">{[ t('reservation_id') ]}</td><td style="padding:.5rem">{[ selectedReservation.id ]}</td></tr>
+          <tr><td style="padding:.5rem;font-weight:600;color:var(--text-light)">{[ t('facility_detail') ]}</td><td style="padding:.5rem">{[ selectedReservation.facility_name ]}</td></tr>
+          <tr><td style="padding:.5rem;font-weight:600;color:var(--text-light)">{[ t('booking_date') ]}</td><td style="padding:.5rem">{[ selectedReservation.date ]}</td></tr>
+          <tr><td style="padding:.5rem;font-weight:600;color:var(--text-light)">{[ t('booking_time') ]}</td><td style="padding:.5rem">{[ selectedReservation.start_time ]} - {[ selectedReservation.end_time ]}</td></tr>
+          <tr><td style="padding:.5rem;font-weight:600;color:var(--text-light)">{[ t('num_people') ]}</td><td style="padding:.5rem">{[ selectedReservation.num_people ]}</td></tr>
+          <tr><td style="padding:.5rem;font-weight:600;color:var(--text-light)">{[ t('purpose') ]}</td><td style="padding:.5rem">{[ selectedReservation.purpose || '-' ]}</td></tr>
+          <tr><td style="padding:.5rem;font-weight:600;color:var(--text-light)">{[ t('total_price') ]}</td><td style="padding:.5rem">{[ (selectedReservation.price || 0).toLocaleString() ]}{[ t('yen') ]}</td></tr>
+          <tr><td style="padding:.5rem;font-weight:600;color:var(--text-light)">{[ t('status') ]}</td><td style="padding:.5rem">{[ selectedReservation.status === 'confirmed' ? t('confirmed') : t('cancelled') ]}</td></tr>
+          <tr><td style="padding:.5rem;font-weight:600;color:var(--text-light)">{[ t('payment') ]}</td><td style="padding:.5rem">{[ selectedReservation.payment_status === 'paid' ? t('paid') : t('unpaid') ]}</td></tr>
+        </table>
+      </div>
+
+      <div class="card" v-if="selectedReservation.status === 'confirmed' && selectedReservation.payment_status !== 'paid'">
+        <h2>{[ t('payment') ]}</h2>
+        <p style="margin-bottom:1rem">{[ t('total_price') ]}: {[ (selectedReservation.price || 0).toLocaleString() ]}{[ t('yen') ]}</p>
+        <div class="flex gap-1">
+          <button class="btn btn-success" @click="processPayment">{[ t('pay') ]}</button>
+          <button class="btn btn-danger" @click="cancelReservation">{[ t('cancel_reservation') ]}</button>
+        </div>
+      </div>
+
+      <div class="card" v-if="selectedReservation.payment_status === 'paid'">
+        <h2>{[ t('payment_qr_title') ]}</h2>
+        <div class="qr-container">
+          <img :src="qrCodeUrl" alt="Payment QR Code">
+          <p>{[ t('qr_instruction') ]}</p>
+        </div>
+      </div>
+
+      <div class="card pdf-section" v-if="selectedReservation.status === 'confirmed'">
+        <h2>{[ t('download_pdf') ]}</h2>
+        <a :href="'/api/reservations/' + selectedReservation.id + '/pdf'" class="btn btn-primary" download>{[ t('download_pdf') ]}</a>
+      </div>
+    </div>
+
+    <!-- Profile -->
+    <div v-if="page === 'profile' && user">
+      <h1 style="margin-bottom:1rem">{[ t('profile_title') ]}</h1>
+      <div class="card" style="max-width:500px">
+        <div class="form-group">
+          <label>{[ t('username') ]}</label>
+          <input :value="user.username" disabled style="background:var(--bg)">
+        </div>
+        <div class="form-group">
+          <label>{[ t('name') ]}</label>
+          <input v-model="profileForm.name">
+        </div>
+        <div class="form-group">
+          <label>{[ t('email') ]}</label>
+          <input v-model="profileForm.email">
+        </div>
+        <div class="form-group">
+          <label>{[ t('language') ]}</label>
+          <select v-model="profileForm.lang">
+            <option value="ja">{[ t('japanese') ]}</option>
+            <option value="en">{[ t('english') ]}</option>
+            <option value="zh">{[ t('chinese') ]}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>{[ t('password') ]}</label>
+          <input type="password" v-model="profileForm.password" placeholder="Leave blank to keep current">
+        </div>
+        <button class="btn btn-primary" @click="updateProfile" :disabled="loading">{[ t('save') ]}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const { createApp } = Vue;
+
+const translations = {
+  ja: {
+    app_title: '自治体施設予約システム', home: 'ホーム',
+    facilities: '施設検索', my_reservations: '予約一覧',
+    profile: 'プロフィール', login: 'ログイン',
+    register: '登録', logout: 'ログアウト',
+    search: '検索', search_placeholder: '施設名、所在地で検索',
+    facility_type: '種別', all_types: 'すべて',
+    gym: '体育館', meeting_room: '会議室', pool: '温水プール',
+    price: '料金', capacity: '収容人数', location: '所在地',
+    date: '日付', start_time: '開始時間', end_time: '終了時間',
+    num_people: '人数', purpose: '利用目的',
+    purpose_placeholder: '利用目的を入力してください',
+    reserve: '予約する', cancel: 'キャンセル',
+    confirm_cancel: 'キャンセルしますか？',
+    payment: '決済', pay: '支払う', paid: '支払済',
+    unpaid: '未払い', download_pdf: '予約票をダウンロード',
+    status: '状態', confirmed: '予約確定', cancelled: 'キャンセル済',
+    username: 'ユーザー名', email: 'メールアドレス',
+    password: 'パスワード', name: '名前', language: '言語',
+    japanese: '日本語', english: 'English', chinese: '中文',
+    save: '保存',
+    welcome: '自治体施設予約システムへようこそ',
+    welcome_desc: '体育館、会議室、温水プールなど、自治体の施設を簡単に検索・予約できます。',
+    no_results: '該当する施設が見つかりませんでした。',
+    loading: '読み込み中...', error: 'エラーが発生しました',
+    register_title: '新規ユーザー登録', login_title: 'ログイン',
+    already_have_account: 'すでにアカウントをお持ちの方はこちら',
+    no_account: 'アカウントをお持ちでない方はこちら',
+    reservation_success: '予約が完了しました',
+    reservation_cancelled: '予約をキャンセルしました',
+    payment_success: '決済が完了しました',
+    your_reservations: '予約一覧', no_reservations: '予約がありません',
+    facility_detail: '施設詳細', back: '戻る',
+    total_price: '合計料金', yen: '円',
+    hour: '人', hours: '時間',
+    qr_instruction: '以下のQRコードを施設で提示してください',
+    reservation_id: '予約番号', per_hour: '円/時間',
+    check_availability: '空き状況を確認',
+    available: '空きあり', unavailable: '予約済',
+    search_results: '検索結果', booking_date: '予約日',
+    booking_time: '予約時間', profile_title: 'プロフィール設定',
+    language_changed: '言語を変更しました',
+    payment_qr_title: '決済用QRコード',
+    download_ready: 'ダウンロード準備完了',
+    booking_details: '予約詳細', my_page: 'マイページ',
+    welcome_user: 'ようこそ', confirm: '確認',
+    cancel_reservation: '予約をキャンセルする',
+    total: '合計', actions: '操作',
+    detail: '詳細', pay_now: '今すぐ支払う',
+    select_time: '時間を選択', no_slots: '空き時間枠がありません',
+  },
+  en: {
+    app_title: 'Municipal Facility Reservation System',
+    home: 'Home', facilities: 'Facility Search',
+    my_reservations: 'My Reservations', profile: 'Profile',
+    login: 'Login', register: 'Register', logout: 'Logout',
+    search: 'Search', search_placeholder: 'Search by facility name, location',
+    facility_type: 'Type', all_types: 'All',
+    gym: 'Gym', meeting_room: 'Meeting Room', pool: 'Heated Pool',
+    price: 'Price', capacity: 'Capacity', location: 'Location',
+    date: 'Date', start_time: 'Start Time', end_time: 'End Time',
+    num_people: 'Number of People', purpose: 'Purpose',
+    purpose_placeholder: 'Enter the purpose of use',
+    reserve: 'Reserve', cancel: 'Cancel',
+    confirm_cancel: 'Are you sure you want to cancel?',
+    payment: 'Payment', pay: 'Pay', paid: 'Paid',
+    unpaid: 'Unpaid', download_pdf: 'Download Reservation Slip',
+    status: 'Status', confirmed: 'Confirmed', cancelled: 'Cancelled',
+    username: 'Username', email: 'Email', password: 'Password',
+    name: 'Name', language: 'Language',
+    japanese: '日本語', english: 'English', chinese: '中文',
+    save: 'Save',
+    welcome: 'Welcome to Municipal Facility Reservation System',
+    welcome_desc: 'Easily search and reserve municipal facilities such as gyms, meeting rooms, and heated pools.',
+    no_results: 'No facilities found.',
+    loading: 'Loading...', error: 'An error occurred',
+    register_title: 'User Registration', login_title: 'Login',
+    already_have_account: 'Already have an account?',
+    no_account: "Don't have an account?",
+    reservation_success: 'Reservation completed successfully',
+    reservation_cancelled: 'Reservation cancelled',
+    payment_success: 'Payment completed successfully',
+    your_reservations: 'My Reservations',
+    no_reservations: 'No reservations',
+    facility_detail: 'Facility Details', back: 'Back',
+    total_price: 'Total Price', yen: ' JPY',
+    hour: ' people', hours: 'hours',
+    qr_instruction: 'Show this QR code at the facility',
+    reservation_id: 'Reservation ID', per_hour: ' JPY/hour',
+    check_availability: 'Check Availability',
+    available: 'Available', unavailable: 'Booked',
+    search_results: 'Search Results', booking_date: 'Booking Date',
+    booking_time: 'Booking Time', profile_title: 'Profile Settings',
+    language_changed: 'Language changed',
+    payment_qr_title: 'Payment QR Code',
+    download_ready: 'Ready for download',
+    booking_details: 'Booking Details', my_page: 'My Page',
+    welcome_user: 'Welcome', confirm: 'Confirm',
+    cancel_reservation: 'Cancel Reservation',
+    total: 'Total', actions: 'Actions',
+    detail: 'Details', pay_now: 'Pay Now',
+    select_time: 'Select Time', no_slots: 'No available time slots',
+  },
+  zh: {
+    app_title: '市政设施预约系统', home: '首页',
+    facilities: '设施搜索', my_reservations: '我的预约',
+    profile: '个人资料', login: '登录', register: '注册',
+    logout: '登出', search: '搜索',
+    search_placeholder: '按设施名称、地址搜索',
+    facility_type: '类型', all_types: '全部',
+    gym: '体育馆', meeting_room: '会议室', pool: '温水游泳池',
+    price: '费用', capacity: '容纳人数', location: '地址',
+    date: '日期', start_time: '开始时间', end_time: '结束时间',
+    num_people: '人数', purpose: '使用目的',
+    purpose_placeholder: '请输入使用目的',
+    reserve: '预约', cancel: '取消',
+    confirm_cancel: '确定要取消吗？',
+    payment: '支付', pay: '支付', paid: '已支付',
+    unpaid: '未支付', download_pdf: '下载预约单',
+    status: '状态', confirmed: '已确认', cancelled: '已取消',
+    username: '用户名', email: '电子邮箱', password: '密码',
+    name: '姓名', language: '语言',
+    japanese: '日本語', english: 'English', chinese: '中文',
+    save: '保存',
+    welcome: '欢迎使用市政设施预约系统',
+    welcome_desc: '轻松搜索和预约体育馆、会议室、温水游泳池等市政设施。',
+    no_results: '未找到符合条件的设施。',
+    loading: '加载中...', error: '发生错误',
+    register_title: '用户注册', login_title: '登录',
+    already_have_account: '已有账号？',
+    no_account: '没有账号？',
+    reservation_success: '预约成功',
+    reservation_cancelled: '预约已取消',
+    payment_success: '支付成功',
+    your_reservations: '我的预约', no_reservations: '暂无预约',
+    facility_detail: '设施详情', back: '返回',
+    total_price: '总费用', yen: '日元',
+    hour: '人', hours: '小时',
+    qr_instruction: '请向设施工作人员出示此二维码',
+    reservation_id: '预约编号', per_hour: '日元/小时',
+    check_availability: '查看可用性',
+    available: '可预约', unavailable: '已预约',
+    search_results: '搜索结果', booking_date: '预约日期',
+    booking_time: '预约时间', profile_title: '个人资料设置',
+    language_changed: '语言已更改',
+    payment_qr_title: '支付二维码',
+    download_ready: '准备下载',
+    booking_details: '预约详情', my_page: '个人中心',
+    welcome_user: '欢迎', confirm: '确认',
+    cancel_reservation: '取消预约',
+    total: '合计', actions: '操作',
+    detail: '详情', pay_now: '立即支付',
+    select_time: '选择时间', no_slots: '没有可用的时间',
+  }
+};
+
+const app = createApp({
+  data() {
+    return {
+      page: 'home',
+      loading: false,
+      message: '',
+      messageType: 'info',
+      user: null,
+      currentLang: 'ja',
+      loginForm: { username: '', password: '' },
+      registerForm: { username: '', name: '', email: '', password: '' },
+      profileForm: { name: '', email: '', lang: 'ja', password: '' },
+      searchQuery: '',
+      searchType: '',
+      searchPriceMax: null,
+      facilities: [],
+      selectedFacility: null,
+      reservationForm: { date: '', num_people: 1, purpose: '' },
+      timeSlots: [],
+      selectedSlot: null,
+      reservations: [],
+      selectedReservation: null,
+      qrCodeUrl: '',
+    };
+  },
+  computed: {
+    today() {
+      return new Date().toISOString().split('T')[0];
+    },
+  },
+  methods: {
+    t(key) {
+      const lang = this.currentLang;
+      return (translations[lang] && translations[lang][key]) || translations['ja'][key] || key;
+    },
+    typeLabel(type) {
+      const map = {
+        gym: this.t('gym'),
+        meeting_room: this.t('meeting_room'),
+        pool: this.t('pool'),
+      };
+      return map[type] || type;
+    },
+    showMessage(msg, type) {
+      if (type === undefined) type = 'info';
+      this.message = msg;
+      this.messageType = type;
+      setTimeout(() => { this.message = ''; }, 5000);
+    },
+    changePage(p) {
+      this.page = p;
+      this.message = '';
+      if (p === 'facilities') this.searchFacilities();
+      if (p === 'reservations' && this.user) this.loadReservations();
+      if (p === 'profile' && this.user) this.loadProfile();
+    },
+    goHome() {
+      this.page = 'home';
+      this.selectedFacility = null;
+      this.selectedReservation = null;
+      this.timeSlots = [];
+      this.selectedSlot = null;
+    },
+    async api(path, options) {
+      if (options === undefined) options = {};
+      this.loading = true;
+      try {
+        const headers = Object.assign({ 'Content-Type': 'application/json' }, options.headers || {});
+        const res = await fetch(path, Object.assign({ headers: headers }, options));
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Request failed');
+        return data;
+      } catch (e) {
+        this.showMessage(e.message, 'error');
+        return null;
+      } finally {
+        this.loading = false;
+      }
+    },
+    async doLogin() {
+      const data = await this.api('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify(this.loginForm),
+      });
+      if (data) {
+        this.user = data.user;
+        this.currentLang = data.user.lang;
+        this.changePage('home');
+        this.showMessage('Logged in');
+      }
+    },
+    async doRegister() {
+      const data = await this.api('/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(this.registerForm),
+      });
+      if (data) {
+        this.user = data.user;
+        this.currentLang = data.user.lang;
+        this.changePage('home');
+        this.showMessage('Registered');
+      }
+    },
+    async logout() {
+      await this.api('/api/auth/logout', { method: 'POST' });
+      this.user = null;
+      this.page = 'home';
+      this.selectedFacility = null;
+      this.selectedReservation = null;
+    },
+    async searchFacilities() {
+      const params = new URLSearchParams();
+      if (this.searchQuery) params.set('q', this.searchQuery);
+      if (this.searchType) params.set('type', this.searchType);
+      if (this.searchPriceMax) params.set('price_max', this.searchPriceMax);
+      const data = await this.api('/api/facilities?' + params.toString());
+      if (data) this.facilities = data.facilities;
+    },
+    async viewFacility(id) {
+      const data = await this.api('/api/facilities/' + id);
+      if (data) {
+        this.selectedFacility = data.facility;
+        this.page = 'facility-detail';
+        this.timeSlots = [];
+        this.selectedSlot = null;
+        this.reservationForm = { date: this.today, num_people: 1, purpose: '' };
+      }
+    },
+    async checkAvailability() {
+      if (!this.reservationForm.date) return;
+      const data = await this.api(
+        '/api/facilities/' + this.selectedFacility.id + '/availability?date=' + this.reservationForm.date
+      );
+      if (data) {
+        this.timeSlots = data.time_slots;
+        this.selectedSlot = null;
+      }
+    },
+    selectSlot(slot) {
+      if (!slot.available) return;
+      this.selectedSlot = slot.start;
+      this.reservationForm.start_time = slot.start;
+      this.reservationForm.end_time = slot.end;
+    },
+    async createReservation() {
+      if (!this.selectedSlot) { this.showMessage(this.t('select_time'), 'error'); return; }
+      const data = await this.api('/api/reservations', {
+        method: 'POST',
+        body: JSON.stringify({
+          facility_id: this.selectedFacility.id,
+          date: this.reservationForm.date,
+          start_time: this.reservationForm.start_time,
+          end_time: this.reservationForm.end_time,
+          num_people: this.reservationForm.num_people || 1,
+          purpose: this.reservationForm.purpose || '',
+        }),
+      });
+      if (data) {
+        this.showMessage(this.t('reservation_success'), 'success');
+        this.page = 'reservations';
+        this.loadReservations();
+      }
+    },
+    async loadReservations() {
+      const data = await this.api('/api/reservations');
+      if (data) this.reservations = data.reservations;
+    },
+    async viewReservation(id) {
+      const data = await this.api('/api/reservations/' + id);
+      if (data) {
+        this.selectedReservation = data.reservation;
+        this.qrCodeUrl = '/api/reservations/' + id + '/payment/qr?' + Date.now();
+        this.page = 'reservation-detail';
+      }
+    },
+    async processPayment() {
+      const id = this.selectedReservation.id;
+      const data = await this.api('/api/reservations/' + id + '/payment', { method: 'POST' });
+      if (data) {
+        this.showMessage(this.t('payment_success'), 'success');
+        this.selectedReservation = data.reservation;
+        this.qrCodeUrl = '/api/reservations/' + id + '/payment/qr?' + Date.now();
+      }
+    },
+    async cancelReservation() {
+      if (!confirm(this.t('confirm_cancel'))) return;
+      const id = this.selectedReservation.id;
+      const data = await this.api('/api/reservations/' + id, { method: 'DELETE' });
+      if (data) {
+        this.showMessage(this.t('reservation_cancelled'), 'info');
+        this.selectedReservation = data.reservation;
+      }
+    },
+    loadProfile() {
+      this.profileForm = {
+        name: this.user.name,
+        email: this.user.email,
+        lang: this.user.lang,
+        password: '',
+      };
+    },
+    async updateProfile() {
+      const payload = {};
+      if (this.profileForm.name) payload.name = this.profileForm.name;
+      if (this.profileForm.email) payload.email = this.profileForm.email;
+      if (this.profileForm.lang) payload.lang = this.profileForm.lang;
+      if (this.profileForm.password) payload.password = this.profileForm.password;
+      const data = await this.api('/api/user', {
+        method: 'PUT',
+        body: JSON.stringify(payload),
+      });
+      if (data) {
+        this.user = data.user;
+        if (this.profileForm.lang !== this.currentLang) {
+          this.currentLang = this.profileForm.lang;
+          this.showMessage(this.t('language_changed'));
+        }
+        this.showMessage('Saved', 'success');
+      }
+    },
+    async changeLang() {
+      if (this.user) {
+        await this.api('/api/user', {
+          method: 'PUT',
+          body: JSON.stringify({ lang: this.currentLang }),
+        });
+        this.user.lang = this.currentLang;
+      }
+    },
+  },
+  async mounted() {
+    const data = await this.api('/api/user');
+    if (data) {
+      this.user = data.user;
+      this.currentLang = data.user.lang;
+    }
+  },
+});
+
+app.config.compilerOptions.delimiters = ['{[', ']}'];
+app.mount('#app');
+</script>
+</body>
+</html>
