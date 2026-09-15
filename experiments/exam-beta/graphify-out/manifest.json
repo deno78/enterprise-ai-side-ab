@@ -1,0 +1,116 @@
+{
+  ".opencode/opencode.json": {
+    "mtime": 1784687126.4614842,
+    "seen": 1789453129.1741686,
+    "ast_hash": "b1fae22aa59da16d6210315ee865a3ca",
+    "semantic_hash": "b1fae22aa59da16d6210315ee865a3ca"
+  },
+  ".opencode/agents/architect.md": {
+    "mtime": 1784687129.3087544,
+    "seen": 1789453129.1741824,
+    "ast_hash": "02c908acb99386d6963d25add2e57077",
+    "semantic_hash": "02c908acb99386d6963d25add2e57077"
+  },
+  ".opencode/agents/developer.md": {
+    "mtime": 1784687129.7559497,
+    "seen": 1789453129.1741886,
+    "ast_hash": "a6675bde5eeffde44f64724ea674d4eb",
+    "semantic_hash": "a6675bde5eeffde44f64724ea674d4eb"
+  },
+  ".opencode/agents/reviewer.md": {
+    "mtime": 1784686764.7943628,
+    "seen": 1789453129.1741924,
+    "ast_hash": "06c351f050551f58284f2feca81c1865",
+    "semantic_hash": "06c351f050551f58284f2feca81c1865"
+  },
+  ".opencode/skills/code-review-checklist/SKILL.md": {
+    "mtime": 1784686770.0155072,
+    "seen": 1789453129.1741958,
+    "ast_hash": "5b6ee7fec735e00a5d4a2dc3fbb28785",
+    "semantic_hash": "5b6ee7fec735e00a5d4a2dc3fbb28785"
+  },
+  ".opencode/skills/system-design/SKILL.md": {
+    "mtime": 1784686938.799485,
+    "seen": 1789453129.1741984,
+    "ast_hash": "199d969870886b33dfe5ee02adb14d20",
+    "semantic_hash": "199d969870886b33dfe5ee02adb14d20"
+  },
+  "AGENTS.md": {
+    "mtime": 1787042027.9155917,
+    "seen": 1789453129.174202,
+    "ast_hash": "defd839908d025ea61ce89a663562cab",
+    "semantic_hash": "defd839908d025ea61ce89a663562cab"
+  },
+  "docs/architecture/01_architecture_overview.md": {
+    "mtime": 1784687218.7240553,
+    "seen": 1789453129.1742046,
+    "ast_hash": "cb41f2e7426b734e6f8a3a5573f3949d",
+    "semantic_hash": "cb41f2e7426b734e6f8a3a5573f3949d"
+  },
+  "docs/architecture/02_database_schema.md": {
+    "mtime": 1784687227.8210454,
+    "seen": 1789453129.1742074,
+    "ast_hash": "2c9b5d1be8eba0c924a5db5f5d7e5e6b",
+    "semantic_hash": "2c9b5d1be8eba0c924a5db5f5d7e5e6b"
+  },
+  "docs/architecture/03_api_design.md": {
+    "mtime": 1784687242.2145479,
+    "seen": 1789453129.1742103,
+    "ast_hash": "f03a6ad2e64c05e1e680980660d367e1",
+    "semantic_hash": "f03a6ad2e64c05e1e680980660d367e1"
+  },
+  "docs/architecture/04_frontend_structure.md": {
+    "mtime": 1784687254.9269347,
+    "seen": 1789453129.1742134,
+    "ast_hash": "d683cb272ae922d4d8ff45249751d057",
+    "semantic_hash": "d683cb272ae922d4d8ff45249751d057"
+  },
+  "requirements.txt": {
+    "mtime": 1784687749.8459237,
+    "seen": 1789453129.174217,
+    "ast_hash": "9112ca6a432ea7ca6c86c08f06302ebe",
+    "semantic_hash": "9112ca6a432ea7ca6c86c08f06302ebe"
+  },
+  "skills/backend/instructions.md": {
+    "mtime": 1787041993.5645297,
+    "seen": 1789453129.17422,
+    "ast_hash": "5a5a1bfbdcf2a2120dfe3f6204a04576",
+    "semantic_hash": "5a5a1bfbdcf2a2120dfe3f6204a04576"
+  },
+  "skills/design/instructions.md": {
+    "mtime": 1787042001.3431003,
+    "seen": 1789453129.1742227,
+    "ast_hash": "d448a2ecb183ca8b72f211505ef14cba",
+    "semantic_hash": "d448a2ecb183ca8b72f211505ef14cba"
+  },
+  "skills/documentation/instructions.md": {
+    "mtime": 1787042023.3247564,
+    "seen": 1789453129.1742256,
+    "ast_hash": "ab6b9d6e0657ca7d366fa83c62f72379",
+    "semantic_hash": "ab6b9d6e0657ca7d366fa83c62f72379"
+  },
+  "skills/qa/instructions.md": {
+    "mtime": 1787042015.2590065,
+    "seen": 1789453129.1742287,
+    "ast_hash": "a5d07aa59ea04f0415fef79ba9223da6",
+    "semantic_hash": "a5d07aa59ea04f0415fef79ba9223da6"
+  },
+  "skills/ui/instructions.md": {
+    "mtime": 1787042008.3944573,
+    "seen": 1789453129.1742318,
+    "ast_hash": "f116e0f89d1098347563768d0fa8c0c6",
+    "semantic_hash": "f116e0f89d1098347563768d0fa8c0c6"
+  },
+  "spec.md": {
+    "mtime": 1784616974.46356,
+    "seen": 1789453129.1742349,
+    "ast_hash": "59679ac03348d4cef05a6f06a8fcbafd",
+    "semantic_hash": "59679ac03348d4cef05a6f06a8fcbafd"
+  },
+  "static/index.html": {
+    "mtime": 1784687488.5813873,
+    "seen": 1789453129.1742377,
+    "ast_hash": "14a3ed0f434a4e68444223f37fc71748",
+    "semantic_hash": "14a3ed0f434a4e68444223f37fc71748"
+  }
+}

@@ -1,0 +1,248 @@
+{
+  "communities": {
+    "0": [
+      "opencode_opencode_build_description",
+      "opencode_opencode_build_template",
+      "opencode_opencode_command",
+      "opencode_opencode_command_build",
+      "opencode_opencode_command_dist",
+      "opencode_opencode_command_init_db",
+      "opencode_opencode_command_test",
+      "opencode_opencode_dist_description",
+      "opencode_opencode_dist_template",
+      "opencode_opencode_init_db_description",
+      "opencode_opencode_init_db_template",
+      "opencode_opencode_test_description",
+      "opencode_opencode_test_template"
+    ],
+    "1": [
+      "opencode_opencode",
+      "opencode_opencode_compaction",
+      "opencode_opencode_compaction_auto",
+      "opencode_opencode_compaction_tail_turns",
+      "opencode_opencode_instructions",
+      "opencode_opencode_schema",
+      "opencode_opencode_skills",
+      "opencode_opencode_skills_paths",
+      "ref_agents_md",
+      "ref_opencode_skills",
+      "ref_skills",
+      "ref_spec_md"
+    ],
+    "2": [
+      "opencode_opencode_agent_developer",
+      "opencode_opencode_architect_permission",
+      "opencode_opencode_bash_git",
+      "opencode_opencode_bash_rm",
+      "opencode_opencode_developer_description",
+      "opencode_opencode_developer_mode",
+      "opencode_opencode_developer_model",
+      "opencode_opencode_developer_permission",
+      "opencode_opencode_permission",
+      "opencode_opencode_permission_bash",
+      "opencode_opencode_permission_edit",
+      "opencode_opencode_reviewer_permission"
+    ],
+    "3": [
+      "opencode_opencode_agent_instructions_description",
+      "opencode_opencode_agent_instructions_path",
+      "opencode_opencode_design_docs_description",
+      "opencode_opencode_design_docs_path",
+      "opencode_opencode_references",
+      "opencode_opencode_references_agent_instructions",
+      "opencode_opencode_references_design_docs",
+      "opencode_opencode_references_spec",
+      "opencode_opencode_spec_description",
+      "opencode_opencode_spec_path"
+    ],
+    "4": [
+      "opencode_opencode_agent",
+      "opencode_opencode_agent_architect",
+      "opencode_opencode_agent_reviewer",
+      "opencode_opencode_architect_description",
+      "opencode_opencode_architect_mode",
+      "opencode_opencode_architect_model",
+      "opencode_opencode_reviewer_description",
+      "opencode_opencode_reviewer_mode",
+      "opencode_opencode_reviewer_model"
+    ],
+    "5": [
+      "agents_md",
+      "skills_backend_instructions",
+      "skills_design_instructions",
+      "skills_documentation_instructions",
+      "skills_qa_instructions",
+      "skills_ui_instructions",
+      "spec_md"
+    ],
+    "6": [
+      "docs_architecture_overview",
+      "docs_database_schema",
+      "docs_frontend_structure",
+      "sqlite_db",
+      "static_index_html"
+    ],
+    "7": [
+      "opencode_agents_architect",
+      "opencode_skills_system_design"
+    ],
+    "8": [
+      "opencode_agents_reviewer",
+      "opencode_skills_code_review"
+    ],
+    "9": [
+      "docs_api_design"
+    ],
+    "10": [
+      "opencode_agents_developer"
+    ],
+    "11": [
+      "requirements_txt"
+    ]
+  },
+  "cohesion": {
+    "0": 0.15384615384615385,
+    "1": 0.16666666666666666,
+    "2": 0.21212121212121213,
+    "3": 0.2,
+    "4": 0.2222222222222222,
+    "5": 0.38095238095238093,
+    "6": 0.4,
+    "7": 1.0,
+    "8": 1.0,
+    "9": 1.0,
+    "10": 1.0,
+    "11": 1.0
+  },
+  "gods": [
+    {
+      "id": "opencode_opencode_permission_bash",
+      "label": "bash",
+      "degree": 6
+    },
+    {
+      "id": "opencode_opencode_command",
+      "label": "command",
+      "degree": 5
+    },
+    {
+      "id": "opencode_opencode_agent_developer",
+      "label": "developer",
+      "degree": 5
+    },
+    {
+      "id": "opencode_opencode_agent_architect",
+      "label": "architect",
+      "degree": 5
+    },
+    {
+      "id": "opencode_opencode_agent_reviewer",
+      "label": "reviewer",
+      "degree": 5
+    },
+    {
+      "id": "agents_md",
+      "label": "Project Agents Overview",
+      "degree": 5
+    },
+    {
+      "id": "opencode_opencode_permission_edit",
+      "label": "edit",
+      "degree": 4
+    },
+    {
+      "id": "opencode_opencode_references",
+      "label": "references",
+      "degree": 4
+    },
+    {
+      "id": "opencode_opencode_agent",
+      "label": "agent",
+      "degree": 4
+    },
+    {
+      "id": "opencode_opencode_command_build",
+      "label": "build",
+      "degree": 3
+    }
+  ],
+  "surprises": [
+    {
+      "source": "Project Agents Overview",
+      "target": "Backend Agent Instructions",
+      "source_files": [
+        "AGENTS.md",
+        "skills/backend/instructions.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; peripheral node `Backend Agent Instructions` unexpectedly reaches hub `Project Agents Overview`"
+    },
+    {
+      "source": "Project Agents Overview",
+      "target": "Design Agent Instructions",
+      "source_files": [
+        "AGENTS.md",
+        "skills/design/instructions.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; peripheral node `Design Agent Instructions` unexpectedly reaches hub `Project Agents Overview`"
+    },
+    {
+      "source": "Project Agents Overview",
+      "target": "Documentation Agent Instructions",
+      "source_files": [
+        "AGENTS.md",
+        "skills/documentation/instructions.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; peripheral node `Documentation Agent Instructions` unexpectedly reaches hub `Project Agents Overview`"
+    },
+    {
+      "source": "Project Agents Overview",
+      "target": "QA Agent Instructions",
+      "source_files": [
+        "AGENTS.md",
+        "skills/qa/instructions.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; peripheral node `QA Agent Instructions` unexpectedly reaches hub `Project Agents Overview`"
+    },
+    {
+      "source": "Project Agents Overview",
+      "target": "UI Agent Instructions",
+      "source_files": [
+        "AGENTS.md",
+        "skills/ui/instructions.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; peripheral node `UI Agent Instructions` unexpectedly reaches hub `Project Agents Overview`"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `command` connect `Build and Initialization Scripts` to `Agent Configuration and Skills`?",
+      "why": "High betweenness centrality (0.211) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `agent` connect `architect` to `Agent Configuration and Skills`, `bash`?",
+      "why": "High betweenness centrality (0.191) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `references` connect `references` to `Agent Configuration and Skills`?",
+      "why": "High betweenness centrality (0.163) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `description`, `template`, `description` to the rest of the system?",
+      "why": "43 weakly-connected nodes found - possible documentation gaps or missing edges."
+    }
+  ]
+}

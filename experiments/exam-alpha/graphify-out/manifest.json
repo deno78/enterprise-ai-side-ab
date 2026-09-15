@@ -1,0 +1,20 @@
+{
+  "requirements.txt": {
+    "mtime": 1784688859.1130383,
+    "seen": 1789445846.5863383,
+    "ast_hash": "156173dd1f911c8e0cf136be2f1f8f97",
+    "semantic_hash": "156173dd1f911c8e0cf136be2f1f8f97"
+  },
+  "spec.md": {
+    "mtime": 1784688542.993671,
+    "seen": 1789445846.5863483,
+    "ast_hash": "59679ac03348d4cef05a6f06a8fcbafd",
+    "semantic_hash": "59679ac03348d4cef05a6f06a8fcbafd"
+  },
+  "templates/index.html": {
+    "mtime": 1784688936.9004054,
+    "seen": 1789445846.586352,
+    "ast_hash": "a92665bca4f6714f190d38d6cdca52a4",
+    "semantic_hash": "a92665bca4f6714f190d38d6cdca52a4"
+  }
+}
