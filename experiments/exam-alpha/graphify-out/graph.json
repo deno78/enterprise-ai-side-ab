@@ -4,249 +4,99 @@
   "graph": {
     "hyperedges": [
       {
-        "id": "reservation_flow",
-        "label": "Reservation to PDF Flow",
+        "id": "frontend_localization_flow",
+        "label": "Frontend Localization",
         "nodes": [
-          "spec_reservation_function",
-          "spec_mock_payment",
-          "spec_pdf_output",
-          "templates_index_vue_app"
-        ],
-        "relation": "form",
-        "confidence": "EXTRACTED",
-        "confidence_score": 0.95,
-        "source_file": "spec.md"
-      },
-      {
-        "id": "tech_stack_alignment",
-        "label": "Technology Stack Alignment",
-        "nodes": [
-          "requirements_flask",
-          "requirements_flask_sqlalchemy",
-          "spec_system_overview"
+          "templates_index_vue_app",
+          "templates_index_translations"
         ],
         "relation": "participate_in",
         "confidence": "EXTRACTED",
         "confidence_score": 1.0,
-        "source_file": "spec.md"
+        "source_file": "templates/index.html"
       }
     ]
   },
   "nodes": [
     {
-      "id": "templates_index_html",
-      "label": "Index Template",
+      "id": "api_reservations_pdf",
+      "label": "Reservation PDF API",
       "author": null,
       "captured_at": null,
       "community": 0,
-      "community_name": "Reservation Frontend Requirements",
+      "community_name": "Reservation PDF API",
       "contributor": null,
       "file_type": "code",
-      "norm_label": "index template",
+      "norm_label": "reservation pdf api",
+      "rationale": "Endpoint for downloading reservation slips in PDF format.",
+      "source_file": "templates/index.html",
+      "source_location": null,
+      "source_url": null
+    },
+    {
+      "id": "templates_index",
+      "label": "index.html",
+      "author": null,
+      "captured_at": null,
+      "community": 0,
+      "community_name": "Reservation PDF API",
+      "contributor": null,
+      "file_type": "code",
+      "norm_label": "index.html",
       "rationale": null,
+      "source_file": "templates/index.html",
+      "source_location": null,
+      "source_url": null
+    },
+    {
+      "id": "vue_js_cdn",
+      "label": "Vue 3 CDN",
+      "author": null,
+      "captured_at": null,
+      "community": 0,
+      "community_name": "Reservation PDF API",
+      "contributor": null,
+      "file_type": "code",
+      "norm_label": "vue 3 cdn",
+      "rationale": null,
+      "source_file": "templates/index.html",
+      "source_location": null,
+      "source_url": "https://unpkg.com/vue@3/dist/vue.global.prod.js"
+    },
+    {
+      "id": "templates_index_translations",
+      "label": "Translations Object",
+      "author": null,
+      "captured_at": null,
+      "community": 1,
+      "community_name": "Vue Application",
+      "contributor": null,
+      "file_type": "code",
+      "norm_label": "translations object",
+      "rationale": "Contains multi-language support for Japanese, English, and Chinese.",
       "source_file": "templates/index.html",
       "source_location": null,
       "source_url": null
     },
     {
       "id": "templates_index_vue_app",
-      "label": "Vue.js Frontend App",
+      "label": "Vue Application",
       "author": null,
       "captured_at": null,
-      "community": 0,
-      "community_name": "Reservation Frontend Requirements",
+      "community": 1,
+      "community_name": "Vue Application",
       "contributor": null,
       "file_type": "code",
-      "norm_label": "vue.js frontend app",
-      "rationale": "Frontend logic implemented via Vue.js CDN as specified in spec.md",
+      "norm_label": "vue application",
+      "rationale": "The main frontend logic is encapsulated in a Vue 3 application instance.",
       "source_file": "templates/index.html",
-      "source_location": null,
-      "source_url": null
-    },
-    {
-      "id": "spec_facility_search",
-      "label": "Facility Search Requirement",
-      "author": null,
-      "captured_at": null,
-      "community": 0,
-      "community_name": "Reservation Frontend Requirements",
-      "contributor": null,
-      "file_type": "concept",
-      "norm_label": "facility search requirement",
-      "rationale": null,
-      "source_file": "spec.md",
-      "source_location": null,
-      "source_url": null
-    },
-    {
-      "id": "spec_reservation_function",
-      "label": "Reservation Function Requirement",
-      "author": null,
-      "captured_at": null,
-      "community": 0,
-      "community_name": "Reservation Frontend Requirements",
-      "contributor": null,
-      "file_type": "concept",
-      "norm_label": "reservation function requirement",
-      "rationale": null,
-      "source_file": "spec.md",
-      "source_location": null,
-      "source_url": null
-    },
-    {
-      "id": "api_reservations_pdf",
-      "label": "/api/reservations/<id>/pdf",
-      "author": null,
-      "captured_at": null,
-      "community": 1,
-      "community_name": "PDF Document Generation",
-      "contributor": null,
-      "file_type": "code",
-      "norm_label": "/api/reservations/<id>/pdf",
-      "rationale": null,
-      "source_file": "templates/index.html",
-      "source_location": null,
-      "source_url": null
-    },
-    {
-      "id": "requirements_fpdf2",
-      "label": "fpdf2",
-      "author": null,
-      "captured_at": null,
-      "community": 1,
-      "community_name": "PDF Document Generation",
-      "contributor": null,
-      "file_type": "code",
-      "norm_label": "fpdf2",
-      "rationale": null,
-      "source_file": "requirements.txt",
-      "source_location": null,
-      "source_url": null
-    },
-    {
-      "id": "spec_pdf_output",
-      "label": "PDF Output Requirement",
-      "author": null,
-      "captured_at": null,
-      "community": 1,
-      "community_name": "PDF Document Generation",
-      "contributor": null,
-      "file_type": "concept",
-      "norm_label": "pdf output requirement",
-      "rationale": null,
-      "source_file": "spec.md",
-      "source_location": null,
-      "source_url": null
-    },
-    {
-      "id": "requirements_flask",
-      "label": "Flask",
-      "author": null,
-      "captured_at": null,
-      "community": 2,
-      "community_name": "Flask",
-      "contributor": null,
-      "file_type": "code",
-      "norm_label": "flask",
-      "rationale": null,
-      "source_file": "requirements.txt",
-      "source_location": null,
-      "source_url": null
-    },
-    {
-      "id": "spec_system_overview",
-      "label": "System Overview",
-      "author": null,
-      "captured_at": null,
-      "community": 2,
-      "community_name": "Flask",
-      "contributor": null,
-      "file_type": "document",
-      "norm_label": "system overview",
-      "rationale": null,
-      "source_file": "spec.md",
-      "source_location": null,
-      "source_url": null
-    },
-    {
-      "id": "requirements_qrcode",
-      "label": "qrcode",
-      "author": null,
-      "captured_at": null,
-      "community": 3,
-      "community_name": "qrcode",
-      "contributor": null,
-      "file_type": "code",
-      "norm_label": "qrcode",
-      "rationale": null,
-      "source_file": "requirements.txt",
-      "source_location": null,
-      "source_url": null
-    },
-    {
-      "id": "spec_mock_payment",
-      "label": "Mock Payment Requirement",
-      "author": null,
-      "captured_at": null,
-      "community": 3,
-      "community_name": "qrcode",
-      "contributor": null,
-      "file_type": "concept",
-      "norm_label": "mock payment requirement",
-      "rationale": null,
-      "source_file": "spec.md",
-      "source_location": null,
-      "source_url": null
-    },
-    {
-      "id": "requirements_flask_bcrypt",
-      "label": "Flask-Bcrypt",
-      "author": null,
-      "captured_at": null,
-      "community": 4,
-      "community_name": "Flask-Bcrypt",
-      "contributor": null,
-      "file_type": "code",
-      "norm_label": "flask-bcrypt",
-      "rationale": null,
-      "source_file": "requirements.txt",
-      "source_location": null,
-      "source_url": null
-    },
-    {
-      "id": "requirements_flask_sqlalchemy",
-      "label": "Flask-SQLAlchemy",
-      "author": null,
-      "captured_at": null,
-      "community": 5,
-      "community_name": "Flask-SQLAlchemy",
-      "contributor": null,
-      "file_type": "code",
-      "norm_label": "flask-sqlalchemy",
-      "rationale": null,
-      "source_file": "requirements.txt",
-      "source_location": null,
-      "source_url": null
-    },
-    {
-      "id": "requirements_pillow",
-      "label": "Pillow",
-      "author": null,
-      "captured_at": null,
-      "community": 6,
-      "community_name": "Pillow",
-      "contributor": null,
-      "file_type": "code",
-      "norm_label": "pillow",
-      "rationale": null,
-      "source_file": "requirements.txt",
       "source_location": null,
       "source_url": null
     }
   ],
   "links": [
     {
-      "source": "templates_index_vue_app",
+      "source": "templates_index",
       "target": "api_reservations_pdf",
       "relation": "calls",
       "confidence": "EXTRACTED",
@@ -256,9 +106,19 @@
       "weight": 1.0
     },
     {
+      "source": "templates_index",
+      "target": "vue_js_cdn",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "templates/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
       "source": "templates_index_vue_app",
-      "target": "spec_facility_search",
-      "relation": "implements",
+      "target": "templates_index_translations",
+      "relation": "references",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "templates/index.html",
@@ -267,60 +127,10 @@
     },
     {
       "source": "templates_index_vue_app",
-      "target": "spec_reservation_function",
-      "relation": "implements",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "templates/index.html",
-      "source_location": null,
-      "weight": 1.0
-    },
-    {
-      "source": "spec_system_overview",
-      "target": "requirements_flask",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "spec.md",
-      "source_location": null,
-      "weight": 1.0
-    },
-    {
-      "source": "templates_index_html",
-      "target": "templates_index_vue_app",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "templates/index.html",
-      "source_location": null,
-      "weight": 1.0
-    },
-    {
-      "source": "spec_mock_payment",
-      "target": "requirements_qrcode",
-      "relation": "references",
+      "target": "api_reservations_pdf",
+      "relation": "calls",
       "confidence": "INFERRED",
       "confidence_score": 0.9,
-      "source_file": "spec.md",
-      "source_location": null,
-      "weight": 1.0
-    },
-    {
-      "source": "spec_pdf_output",
-      "target": "requirements_fpdf2",
-      "relation": "references",
-      "confidence": "INFERRED",
-      "confidence_score": 0.9,
-      "source_file": "spec.md",
-      "source_location": null,
-      "weight": 1.0
-    },
-    {
-      "source": "api_reservations_pdf",
-      "target": "spec_pdf_output",
-      "relation": "implements",
-      "confidence": "INFERRED",
-      "confidence_score": 1.0,
       "source_file": "templates/index.html",
       "source_location": null,
       "weight": 1.0
@@ -328,32 +138,17 @@
   ],
   "hyperedges": [
     {
-      "id": "reservation_flow",
-      "label": "Reservation to PDF Flow",
+      "id": "frontend_localization_flow",
+      "label": "Frontend Localization",
       "nodes": [
-        "spec_reservation_function",
-        "spec_mock_payment",
-        "spec_pdf_output",
-        "templates_index_vue_app"
-      ],
-      "relation": "form",
-      "confidence": "EXTRACTED",
-      "confidence_score": 0.95,
-      "source_file": "spec.md"
-    },
-    {
-      "id": "tech_stack_alignment",
-      "label": "Technology Stack Alignment",
-      "nodes": [
-        "requirements_flask",
-        "requirements_flask_sqlalchemy",
-        "spec_system_overview"
+        "templates_index_vue_app",
+        "templates_index_translations"
       ],
       "relation": "participate_in",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "spec.md"
+      "source_file": "templates/index.html"
     }
   ],
-  "built_at_commit": "3bc27fbbac1bf1510c8c36f3f48e00a7cbfdf16a"
+  "built_at_commit": "562031a0086564baa6bffb0b6bd54d144eabe4ff"
 }

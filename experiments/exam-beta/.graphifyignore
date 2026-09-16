@@ -1,0 +1,6 @@
+skills/
+docs/
+dist/
+.opencode/
+*.md
+requirements.txt

@@ -1,0 +1,288 @@
+{
+  "communities": {
+    "0": [
+      "models_init",
+      "models_reservation",
+      "models_reservation_log",
+      "models_reservation_log_reservationlog",
+      "models_reservation_reservation",
+      "models_reservation_reservation_to_dict",
+      "routes_reservations",
+      "routes_reservations_cancel_reservation",
+      "routes_reservations_create_reservation",
+      "routes_reservations_download_pdf",
+      "routes_reservations_get_reservation",
+      "routes_reservations_list_reservations",
+      "routes_reservations_py_login_required",
+      "routes_reservations_py_route",
+      "routes_reservations_update_reservation",
+      "services_pdf_service",
+      "services_pdf_service_generate_reservation_pdf"
+    ],
+    "1": [
+      "models_user",
+      "models_user_user",
+      "models_user_user_to_dict",
+      "routes_auth",
+      "routes_auth_get_me",
+      "routes_auth_login",
+      "routes_auth_logout",
+      "routes_auth_py_login_required",
+      "routes_auth_py_route",
+      "routes_auth_register",
+      "routes_auth_update_profile",
+      "usermixin"
+    ],
+    "2": [
+      "models_payment",
+      "models_payment_payment",
+      "models_payment_payment_to_dict",
+      "routes_init",
+      "routes_payments",
+      "routes_payments_get_payment",
+      "routes_payments_make_payment",
+      "routes_payments_py_login_required",
+      "routes_payments_py_route"
+    ],
+    "3": [
+      "routes_facilities",
+      "routes_facilities_create_facility",
+      "routes_facilities_delete_facility",
+      "routes_facilities_get_availability",
+      "routes_facilities_get_facility",
+      "routes_facilities_list_facilities",
+      "routes_facilities_py_login_required",
+      "routes_facilities_py_route",
+      "routes_facilities_update_facility"
+    ],
+    "4": [
+      "app",
+      "app_create_app",
+      "app_seed_data",
+      "config",
+      "config_config",
+      "models_facility",
+      "models_facility_facility",
+      "models_facility_facility_to_dict"
+    ],
+    "5": [
+      "static_js_components_facility_detail",
+      "static_js_components_facility_detail_facilitydetail",
+      "static_js_components_facility_detail_root_currentroute"
+    ],
+    "6": [
+      "static_js_i18n",
+      "static_js_i18n_i18n",
+      "static_js_i18n_messages"
+    ],
+    "7": [
+      "static_js_store",
+      "static_js_store_apifetch",
+      "static_js_store_store"
+    ],
+    "8": [
+      "static_js_app",
+      "static_js_app_app"
+    ],
+    "9": [
+      "static_js_components_admin_facilities",
+      "static_js_components_admin_facilities_adminfacilities"
+    ],
+    "10": [
+      "static_js_components_admin_reservations",
+      "static_js_components_admin_reservations_adminreservations"
+    ],
+    "11": [
+      "static_js_components_facility_list",
+      "static_js_components_facility_list_facilitylist"
+    ],
+    "12": [
+      "static_js_components_login",
+      "static_js_components_login_loginpage"
+    ],
+    "13": [
+      "static_js_components_payment",
+      "static_js_components_payment_paymentpage"
+    ],
+    "14": [
+      "static_js_components_profile",
+      "static_js_components_profile_profilepage"
+    ],
+    "15": [
+      "static_js_components_register",
+      "static_js_components_register_registerpage"
+    ],
+    "16": [
+      "static_js_components_reservation_detail",
+      "static_js_components_reservation_detail_reservationdetail"
+    ],
+    "17": [
+      "static_js_components_reservation_form",
+      "static_js_components_reservation_form_reservationform"
+    ],
+    "18": [
+      "static_js_components_reservation_list",
+      "static_js_components_reservation_list_reservationlist"
+    ],
+    "19": [
+      "services_init"
+    ],
+    "20": [
+      "static_index"
+    ]
+  },
+  "cohesion": {
+    "0": 0.25735294117647056,
+    "1": 0.2727272727272727,
+    "2": 0.3055555555555556,
+    "3": 0.4166666666666667,
+    "4": 0.39285714285714285,
+    "5": 0.6666666666666666,
+    "6": 0.6666666666666666,
+    "7": 0.6666666666666666,
+    "8": 1.0,
+    "9": 1.0,
+    "10": 1.0,
+    "11": 1.0,
+    "12": 1.0,
+    "13": 1.0,
+    "14": 1.0,
+    "15": 1.0,
+    "16": 1.0,
+    "17": 1.0,
+    "18": 1.0,
+    "19": 1.0,
+    "20": 1.0
+  },
+  "gods": [
+    {
+      "id": "models_reservation_log_reservationlog",
+      "label": "ReservationLog",
+      "degree": 6
+    },
+    {
+      "id": "models_user_user",
+      "label": "User",
+      "degree": 5
+    },
+    {
+      "id": "models_facility_facility",
+      "label": "Facility",
+      "degree": 5
+    },
+    {
+      "id": "routes_reservations_create_reservation",
+      "label": "create_reservation()",
+      "degree": 5
+    },
+    {
+      "id": "models_reservation_reservation",
+      "label": "Reservation",
+      "degree": 4
+    },
+    {
+      "id": "models_payment_payment",
+      "label": "Payment",
+      "degree": 4
+    },
+    {
+      "id": "routes_reservations_cancel_reservation",
+      "label": "cancel_reservation()",
+      "degree": 4
+    },
+    {
+      "id": "routes_reservations_download_pdf",
+      "label": "download_pdf()",
+      "degree": 4
+    },
+    {
+      "id": "routes_reservations_update_reservation",
+      "label": "update_reservation()",
+      "degree": 4
+    },
+    {
+      "id": "routes_payments_make_payment",
+      "label": "make_payment()",
+      "degree": 4
+    }
+  ],
+  "surprises": [
+    {
+      "source": "create_app()",
+      "target": "Config",
+      "source_files": [
+        "app.py",
+        "config.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "create_facility()",
+      "target": "Facility",
+      "source_files": [
+        "routes/facilities.py",
+        "models/facility.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "cancel_reservation()",
+      "target": "ReservationLog",
+      "source_files": [
+        "routes/reservations.py",
+        "models/reservation_log.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories"
+    },
+    {
+      "source": "create_reservation()",
+      "target": "ReservationLog",
+      "source_files": [
+        "routes/reservations.py",
+        "models/reservation_log.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories"
+    },
+    {
+      "source": "update_reservation()",
+      "target": "ReservationLog",
+      "source_files": [
+        "routes/reservations.py",
+        "models/reservation_log.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `User` connect `User Authentication` to `Reservation Management`?",
+      "why": "High betweenness centrality (0.035) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `Facility` connect `App Configuration and Models` to `Reservation Management`, `Facility Management API`?",
+      "why": "High betweenness centrality (0.028) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `Payment` connect `Payment Processing` to `Reservation Management`?",
+      "why": "High betweenness centrality (0.023) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `AdminReservations`, `FacilityList`, `LoginPage` to the rest of the system?",
+      "why": "15 weakly-connected nodes found - possible documentation gaps or missing edges."
+    }
+  ]
+}

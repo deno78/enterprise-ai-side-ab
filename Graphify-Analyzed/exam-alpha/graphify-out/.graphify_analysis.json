@@ -1,0 +1,195 @@
+{
+  "communities": {
+    "0": [
+      "app",
+      "app_api_login",
+      "app_api_logout",
+      "app_api_register",
+      "app_api_translations",
+      "app_api_user",
+      "app_index",
+      "models",
+      "models_user",
+      "route"
+    ],
+    "1": [
+      "api_reservations_pdf",
+      "templates_index",
+      "templates_index_translations",
+      "templates_index_vue_app",
+      "vue_js_cdn"
+    ],
+    "2": [
+      "app_api_facilities",
+      "app_api_payment",
+      "app_api_reservation",
+      "app_get_user_lang"
+    ],
+    "3": [
+      "app_api_facility",
+      "app_seed_data",
+      "models_facility",
+      "models_facility_to_dict"
+    ],
+    "4": [
+      "app_api_payment_qr",
+      "app_api_reservation_pdf",
+      "app_api_reservations",
+      "app_login_required"
+    ],
+    "5": [
+      "app_api_availability",
+      "models_reservation",
+      "models_reservation_to_dict"
+    ]
+  },
+  "cohesion": {
+    "0": 0.4,
+    "1": 0.4,
+    "2": 0.5,
+    "3": 0.5,
+    "4": 0.5,
+    "5": 0.6666666666666666
+  },
+  "gods": [
+    {
+      "id": "models_reservation",
+      "label": "Reservation",
+      "degree": 9
+    },
+    {
+      "id": "app_get_user_lang",
+      "label": "get_user_lang()",
+      "degree": 8
+    },
+    {
+      "id": "models_facility",
+      "label": "Facility",
+      "degree": 7
+    },
+    {
+      "id": "app_login_required",
+      "label": "login_required()",
+      "degree": 7
+    },
+    {
+      "id": "models_user",
+      "label": "User",
+      "degree": 6
+    },
+    {
+      "id": "app_api_payment",
+      "label": "api_payment()",
+      "degree": 5
+    },
+    {
+      "id": "app_api_reservation",
+      "label": "api_reservation()",
+      "degree": 5
+    },
+    {
+      "id": "app_api_reservation_pdf",
+      "label": "api_reservation_pdf()",
+      "degree": 5
+    },
+    {
+      "id": "app_api_reservations",
+      "label": "api_reservations()",
+      "degree": 5
+    },
+    {
+      "id": "app_api_user",
+      "label": "api_user()",
+      "degree": 4
+    }
+  ],
+  "surprises": [
+    {
+      "source": "get_user_lang()",
+      "target": "User",
+      "source_files": [
+        "app.py",
+        "models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "api_availability()",
+      "target": "Facility",
+      "source_files": [
+        "app.py",
+        "models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "api_facilities()",
+      "target": "Facility",
+      "source_files": [
+        "app.py",
+        "models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "api_payment()",
+      "target": "Reservation",
+      "source_files": [
+        "app.py",
+        "models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "api_payment_qr()",
+      "target": "Reservation",
+      "source_files": [
+        "app.py",
+        "models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `Reservation` connect `Reservation` to `User Authentication and Routing`, `get_user_lang`, `login_required`?",
+      "why": "High betweenness centrality (0.074) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `Facility` connect `Facility` to `User Authentication and Routing`, `get_user_lang`, `Reservation`?",
+      "why": "High betweenness centrality (0.068) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `get_user_lang()` connect `get_user_lang` to `User Authentication and Routing`, `Facility`, `login_required`?",
+      "why": "High betweenness centrality (0.018) - this node is a cross-community bridge."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 6 inferred relationships involving `Reservation` (e.g. with `api_availability()` and `api_payment()`) actually correct?",
+      "why": "`Reservation` has 6 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 3 inferred relationships involving `Facility` (e.g. with `api_availability()` and `api_facilities()`) actually correct?",
+      "why": "`Facility` has 3 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `Reservation PDF API`, `Translations Object` to the rest of the system?",
+      "why": "2 weakly-connected nodes found - possible documentation gaps or missing edges."
+    }
+  ]
+}
